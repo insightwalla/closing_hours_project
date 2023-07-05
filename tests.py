@@ -49,16 +49,20 @@ def open_data():
     data_1 = pd.read_csv('data/data_1.csv')
     data_2 = pd.read_csv('data/data_2.csv')
     # merge the two dataframes
+
     data = pd.concat([data_1, data_2])
-    data = data[columns_for_sales]
+    # rename the columns
+    data.rename(columns={'DateOfBusiness': 'Date'}, inplace=True) 
+    data = data[columns_for_sales] 
     return data
 
 from Fourth_Analyser import FourthData
 from prepare_data import Transformation
 @st.cache_data
 def get_data():
-    data = FourthData('data/April Rota Data1.csv').df
+    data = FourthData('data/Rota_Data_May.csv').df
     data = Transformation(data).transform()
     return data
 
 data_rota = get_data()
+

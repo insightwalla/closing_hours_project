@@ -33,7 +33,7 @@ class UI_For_Daily_View:
         self.columns_hours_to_display = self.DEFAULTS_COLUMNS_HOURS  if columns_hours_to_display is None else columns_hours_to_display
         self.run()
     
-    def transformation0(self):
+    def transformation0(self, int_month = 5):
         '''
         Since some of the data is not correct, I will transform the data to make it correct
         modifying the format of the date, and adding the month, day, and year
@@ -43,9 +43,9 @@ class UI_For_Daily_View:
         self.data['Day'] = self.data['Shift date'].dt.day
         self.data['Year'] = self.data['Shift date'].dt.year
         # if month isn't 4 then that is the day
-        self.data['Day'] = self.data.apply(lambda x: x['Day'] if x['Month'] == 4 else x['Month'], axis=1)
+        self.data['Day'] = self.data.apply(lambda x: x['Day'] if x['Month'] == int_month else x['Month'], axis=1)
         # set all month to 4
-        self.data['Month'] = 4
+        self.data['Month'] = int_month
         # now set the date to the correct format
         self.data['Shift date'] = pd.to_datetime(self.data[['Day', 'Month', 'Year']])
         # drop the columns
@@ -142,7 +142,7 @@ class UI_For_Daily_View:
         # filter out the restaurant
         if self.restaurant != []:
             res_ids = [int(el[1]) for el in self.restaurant]
-            st.write(res_ids)
+            #st.write(res_ids)
             self.data_for_sales = self.data_for_sales[self.data_for_sales['FKStoreID'].isin(res_ids)]
        
         #save the data for sales as csv
@@ -195,24 +195,19 @@ class UI_For_Daily_View:
             if self.restaurant != []:
                 # check if all restaurant have the same closing time
                 if len(set([res_[res][day_name] for res in self.restaurant])) != 1:
-                    st.write('Restaurants have different closing time')
+                    #st.write('Restaurants have different closing time')
                     closing_time = 2 if day_name in ['Sunday', 'Monday', 'Tuesday', 'Wednesday'] else 6
                 else:
-                    st.write('Restaurants have the same closing time')
+                    #st.write('Restaurants have the same closing time')
                     closing_time = res_[self.restaurant[0]][day_name]
             # filter the data
             df_date = self.data[self.data['Shift date'] == date]
             # keep only rows that sums greater than 0
-            # filter by restaurant
             df_date = df_date[df_date[self.columns_hours_to_display[closing_time:]].sum(axis=1) > 0]
             # sort by division
             df_date.sort_values(by=['Division'], inplace=True)
-            #st.write(df_date)
-            #st.stop()
             total = df_date['Total_minute_after_close'].sum()
-            #st.write(f'Total: {total} minutes')
             average_across_all = total / len(df_date)
-            #st.write(f'Average: {average_across_all:.2f} minutes')
 
             # create a heatmap, x axis is the hours, y axis is the 1 or 0
             with st.expander(f'{date.date()} - {date.day_name()} - Average Time: {average_across_all:.0f} minutes', expanded=False):
@@ -298,7 +293,7 @@ class UI_For_Daily_View:
                 data_for_sales['Date'] = data_for_sales['Date'].apply(lambda x: x.date())
                 data_for_sales = data_for_sales[data_for_sales['Date'] == date]
                 
-                st.write(data_for_sales)
+                #st.write(data_for_sales)
 
                 # add columns that are onlyh in the columns_hours_to_display
                 for col in self.columns_hours_to_display:

@@ -39,15 +39,16 @@ class UI_For_Department_View:
         modifying the format of the date, and adding the month, day, and year
 
         I am modify the month since it is express in 2 different ways
+        day first and month first
         '''
         # add month column, day, and year
         self.data['Month'] = self.data['Shift date'].dt.month
         self.data['Day'] = self.data['Shift date'].dt.day
         self.data['Year'] = self.data['Shift date'].dt.year
         # if month isn't 4 then that is the day
-        self.data['Day'] = self.data.apply(lambda x: x['Day'] if x['Month'] == 4 else x['Month'], axis=1)
+        self.data['Day'] = self.data.apply(lambda x: x['Day'] if x['Month'] == 5 else x['Month'], axis=1)
         # set all month to 4
-        self.data['Month'] = 4
+        self.data['Month'] = 5
         # now set the date to the correct format
         self.data['Shift date'] = pd.to_datetime(self.data[['Day', 'Month', 'Year']])
         # drop the columns

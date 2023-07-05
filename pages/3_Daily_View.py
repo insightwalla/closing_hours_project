@@ -34,7 +34,7 @@ class UI_For_Daily_View:
         self.data_for_sales = open_data()
         self.run()
     
-    def transformation0(self):
+    def transformation0(self, int_month = 5):
         '''
         Since some of the data is not correct, I will transform the data to make it correct
         modifying the format of the date, and adding the month, day, and year
@@ -44,9 +44,9 @@ class UI_For_Daily_View:
         self.data['Day'] = self.data['Shift date'].dt.day
         self.data['Year'] = self.data['Shift date'].dt.year
         # if month isn't 4 then that is the day
-        self.data['Day'] = self.data.apply(lambda x: x['Day'] if x['Month'] == 4 else x['Month'], axis=1)
+        self.data['Day'] = self.data.apply(lambda x: x['Day'] if x['Month'] == int_month else x['Month'], axis=1)
         # set all month to 4
-        self.data['Month'] = 4
+        self.data['Month'] = int_month
         # now set the date to the correct format
         self.data['Shift date'] = pd.to_datetime(self.data[['Day', 'Month', 'Year']])
         # drop the columns
@@ -57,7 +57,6 @@ class UI_For_Daily_View:
         self.unique_shift_dates =unique_shift_dates
         #st.stop()
         self.data_for_sales['Date'] = pd.to_datetime(self.data_for_sales['Date'])
-
 
     def create_sidebar(self):
         self.transformation0()
@@ -140,6 +139,7 @@ class UI_For_Daily_View:
         # transform date column to datetime
         date_for_sales = self.date.date()
         data_for_sales = self.data_for_sales.copy()
+        # rename date of business to date
         data_for_sales['Date'] = data_for_sales['Date'].apply(lambda x: x.date())
         data_for_sales = data_for_sales[data_for_sales['Date'] == date_for_sales]
         

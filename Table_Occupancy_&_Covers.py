@@ -10,11 +10,11 @@ if __name__ == "__main__":
     googleconnection = GoogleBigQuery(key_path = "key.json")
     query = 'SELECT * FROM `sql_server_on_rds.Dishoom_dbo_dpvHstCheckSummary` LIMIT 100'
     #query_2 creates a month column from the date column and filter to keep only September
-    month = st.sidebar.number_input('Month', min_value=1, max_value=12, value=1, step=1)
-    year = st.sidebar.number_input('Year', min_value=2019, max_value=2023, value=2022, step=1)
+    month = st.sidebar.number_input('Month', min_value=1, max_value=12, value=5, step=1)
+    year = st.sidebar.number_input('Year', min_value=2019, max_value=2023, value=2023, step=1)
     store_id = st.sidebar.multiselect('Store ID', 
                                         options=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
-                                        default=[1])
+                                        default=[1,2,3,4,5,6,7,8,9])
 
     query= f'''
             SELECT *,
@@ -27,6 +27,8 @@ if __name__ == "__main__":
 
     df = TransformationGoogleBigQuery(df).df
     st.write(df)
+    #save as csv    
+    df.to_csv('data_for_sales_may.csv')
     
     # take off duration > 360
     df = df[df['Duration'] < 360]
