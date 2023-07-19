@@ -481,7 +481,6 @@ class UInterface:
 
         fig.update_layout(coloraxis_showscale=False)
         # set title as average of total minutes after close
-        fig.update_layout(title_text='How long it takes to close the café after the last order in Average?')
-        st.text('expressed in minutes')
+        fig.update_layout(title_text='How long it takes to close the café after the last order, in Average?')
         st.plotly_chart(fig, use_container_width=True)
 
