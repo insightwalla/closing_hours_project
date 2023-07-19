@@ -432,9 +432,10 @@ class UInterface:
                     annotation_text="1 hr and 30 minutes after closing time")
 
         # set titles for all graphs
-        fig1.update_layout(title_text='Departments')
-        fig2.update_layout(title_text='Restaurants')
-        fig3.update_layout(title_text='Week')
+        fig1.update_layout(title_text='Departments View')
+        fig2.update_layout(title_text='Cafés')
+        fig3.update_layout(title_text='Weekly View')
+
         fig2.update_layout(coloraxis_showscale=False)
         st.plotly_chart(fig2, use_container_width=True)
         fig3.update_layout(coloraxis_showscale=False)
@@ -480,6 +481,6 @@ class UInterface:
 
         fig.update_layout(coloraxis_showscale=False)
         # set title as average of total minutes after close
-        fig.update_layout(title_text='Average of total minutes after close')
+        fig.update_layout(title_text='How long it takes to close the café after the last order in Average? (expressed in minutes after the last order time)')
         st.plotly_chart(fig, use_container_width=True)
 
